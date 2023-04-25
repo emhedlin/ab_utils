@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "andi-xp-utils"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "andi_xp_utils"}]
+
+[tool.poetry.dependencies]
+python = "^3.8,<3.12"
+numpy = "^1.22.4"
+scipy = "^1.10.1"
+python-abc = "^0.2.0"
+pandas = "^1.5.3"
+pytest = "^7.2.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+

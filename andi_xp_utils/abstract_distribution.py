@@ -2,9 +2,7 @@ import numpy as np
 import pandas as pd
 from abc import ABC, abstractmethod
 
-
 class AbstractDistribution(ABC):
-
     def __init__(self, total_samples, proportion_treated):
         self.total_samples = total_samples
         self.num_samples_treatment = int(total_samples * proportion_treated)
@@ -21,7 +19,7 @@ class AbstractDistribution(ABC):
         """
         pass
 
-    def simulated_runs(self, n_runs, alpha=0.9, *args, **kwargs):
+    def simulated_runs(self, n_runs, alpha = 0.9, *args, **kwargs):
         """
         Run the analysis method multiple times and return the number of times
         the 90% credible interval of the difference between the treatment and baseline
@@ -29,8 +27,7 @@ class AbstractDistribution(ABC):
 
         Args:
             n_runs (int): The number of times to run the analysis method.
-            alpha (float): The alpha level for the credible interval. Default is 0.9, but higher values will provide
-            more conservative results.
+            alpha (float): The alpha level for the credible interval. Default is 0.9, but higher values will provide more conservative results.
             *args, **kwargs: Any additional arguments and keyword arguments that should be
                              passed to the analysis method.
 
@@ -45,10 +42,8 @@ class AbstractDistribution(ABC):
             posterior_baseline, posterior_treatment = self.analysis(baseline_data, treatment_data, *args, **kwargs)
 
             # Calculate the credible intervals for the posteriors - credibles specified by alpha argument.
-            lower_bound_baseline, upper_bound_baseline = self.calculate_credible_interval(posterior_baseline,
-                                                                                          alpha=alpha)
-            lower_bound_treatment, upper_bound_treatment = self.calculate_credible_interval(posterior_treatment,
-                                                                                            alpha=alpha)
+            lower_bound_baseline, upper_bound_baseline = self.calculate_credible_interval(posterior_baseline, alpha = alpha)
+            lower_bound_treatment, upper_bound_treatment = self.calculate_credible_interval(posterior_treatment, alpha = alpha)
 
             # Check if the credible intervals do not overlap zero.
             if lower_bound_treatment - upper_bound_baseline > 0:
@@ -70,9 +65,8 @@ class AbstractDistribution(ABC):
             tuple: The lower and upper bounds of the credible interval for the posterior.
         """
         pass
-
-    def required_sample_size(self, n_runs=1000, directional_accuracy=0.9, credible_interval_coverage=0.9,
-                             start_sample_size=1000, size_increments=100, return_df=False):
+    
+    def required_sample_size(self, n_runs=1000, directional_accuracy=0.9, credible_interval_coverage=0.9, start_sample_size=1000, size_increments=100, return_df=False):
         """
         Calculate the required sample size for a desired directional accuracy and credible interval coverage
         in a normal A/B test with a specified baseline value, expected lift, and proportion treated.
@@ -98,6 +92,7 @@ class AbstractDistribution(ABC):
             self.num_samples_treatment = int(np.ceil(self.total_samples * self.proportion_treated))
             self.num_samples_baseline = self.total_samples - self.num_samples_treatment
 
+            
             directional_accuracy_count = 0
 
             for _ in range(n_runs):
@@ -119,8 +114,7 @@ class AbstractDistribution(ABC):
 
         if return_df:
             results_df = pd.DataFrame({
-                'sample_size': np.arange(start_sample_size, sample_size + 1, size_increments)[
-                               :len(directional_accuracies)],
+                'sample_size': np.arange(start_sample_size, sample_size+1, size_increments)[:len(directional_accuracies)],
                 'directional_accuracy': directional_accuracies
             })
             return results_df
